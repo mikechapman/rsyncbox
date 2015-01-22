@@ -1,4 +1,4 @@
-# rsyncbox <sub><sup>v0.0.0</sup></sub>
+# rsyncbox <sub><sup>v0.1.0</sup></sub>
 
 Shell based Dropbox replacement for OS X with any SMB capable remote (e.g. FreeNAS, Synology, QNap, Drobo, Linux server, Windows server).
 

@@ -102,7 +102,7 @@ function status() {
 }
 
 function version() {
-  echo "v0.0.0"
+  echo "v0.1.0"
 }
 
 for subcommand in "$@"
