@@ -3,7 +3,7 @@
 Shell based Dropbox replacement for OS X with any SMB capable server (e.g. FreeNAS, Synology, QNap, Drobo, Linux server, Windows server).
 
 ## Installation
-Make rsyncbox available in your `PATH`:
+Make executable available in your `PATH`:
 
 ```bash
 $ curl -o /usr/local/bin/rsyncbox https://raw.githubusercontent.com/rockymadden/rsyncbox/master/rsyncbox.sh && chmod 0755 /usr/local/bin/rsyncbox
@@ -24,7 +24,7 @@ $ rsyncbox init
 ## Usage
 
 ```bash
-$ rsyncbox [init | status | connect | disconnect | clean | secure | push | pull]
+$ rsyncbox [status | connect | disconnect | clean | secure | push | pull]
 ```
 
 You can issue mutiple subcommands at once:
@@ -47,6 +47,9 @@ $ rsyncbox connect clean secure push
   * Executables: 700 
 * __push:__ Pushes delta to remote store via `rsync`
 * __pull:__ Pulls delta from remote store via `rsync`
+
+# TODO
+* Sharing files via CloudApp/Droplr
 
 ## License
 
