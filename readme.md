@@ -50,6 +50,7 @@ $ rsyncbox connect clean secure push
 
 # TODO
 * Sharing files via CloudApp/Droplr
+* Optional automated push/pull via Finder hooks
 
 ## License
 
