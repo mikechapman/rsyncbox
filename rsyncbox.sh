@@ -23,7 +23,7 @@ function disconnect() {
 
 function help() {
   echo "Example usage:"
-  echo "  rsyncbox [init | status | connect | disconnect | clean | secure | push | pull]"
+  echo "  rsyncbox [init | status | connect | disconnect | clean | secure | pull | pulldiff | push | pushdiff]"
   echo
   echo "Example multiple subcommand usage:"
   echo "  rsyncbox connect clean secure push"
@@ -44,9 +44,17 @@ function pull() {
   rsync -av --inplace --delete --ignore-errors --exclude=.DS_Store /volumes/rsyncbox/rsyncbox/ ~/rsyncbox/
 }
 
+function pulldiff() {
+  rsync -av --dry-run --inplace --delete --ignore-errors --exclude=.DS_Store /volumes/rsyncbox/rsyncbox/ ~/rsyncbox/
+}
+
 function push() {
   touch ~/.rsyncbox/push > /dev/null 2>&1;
   rsync -av --inplace --delete --ignore-errors --exclude=.DS_Store ~/rsyncbox/ /volumes/rsyncbox/rsyncbox/
+}
+
+function pushdiff() {
+  rsync -av --dry-run --inplace --delete --ignore-errors --exclude=.DS_Store ~/rsyncbox/ /volumes/rsyncbox/rsyncbox/
 }
 
 function secure() {
@@ -105,7 +113,9 @@ do
     disconnect) disconnect ;;
     init) init ;;
     pull) pull ;;
+    pulldiff) pulldiff ;;
     push) push ;;
+    pushdiff) pushdiff ;;
     secure) secure ;;
     status) status ;;
     --help) help ;;

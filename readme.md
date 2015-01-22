@@ -24,7 +24,7 @@ $ rsyncbox init
 ## Usage
 
 ```bash
-$ rsyncbox [status | connect | disconnect | clean | secure | push | pull]
+$ rsyncbox [status | connect | disconnect | clean | secure | pull | pulldiff | push | pushdiff]
 ```
 
 You can issue mutiple subcommands at once:
@@ -44,9 +44,11 @@ $ rsyncbox connect clean secure push
 * __clean:__ Removes all `.DS_Store` files from the local store
 * __secure:__ Secures, efficiently, the local store via `find` and `chmod`
   * Non-executables: 600
-  * Executables: 700 
-* __push:__ Pushes delta to remote store via `rsync`
+  * Executables: 700
 * __pull:__ Pulls delta from remote store via `rsync`
+* __pulldiff:__ Shows pull delta to remote store via `rsync --dry-run`
+* __push:__ Pushes delta to remote store via `rsync`
+* __pushdiff:__ Shows push delta to remote store via `rsync --dry-run`
 
 # TODO
 * Sharing files via CloudApp/Droplr
