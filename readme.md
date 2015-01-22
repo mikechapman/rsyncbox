@@ -38,10 +38,10 @@ $ rsyncbox connect clean secure push
   * `~/rsyncbox` is the local store
   * `~/.rsyncbox` is the local configuration
   * `${RSYNCBOX_REMOTE_SMB_PATH}/rsyncbox` is the remote store
-* __status:__ Returns the remote store status, last cleaned, last secured, last pushed, and last pulled timestamps
+* __status:__ Returns the remote status and the last timestamps for `clean`, `secure`, `push`, and `pull`
 * __connect:__ Connects to the remote store via `mount_smbfs`
 * __disconnect:__ Disconnects from the remote store via `unmount`
-* __clean:__ Removes all `.DS_Store` files from the local store
+* __clean:__ Removes, efficiently, all `.DS_Store` files from the local store
 * __secure:__ Secures, efficiently, the local store via `find` and `chmod`
   * Non-executables: 600
   * Executables: 700
