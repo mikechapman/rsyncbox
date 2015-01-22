@@ -12,7 +12,7 @@ $ curl -o /usr/local/bin/rsyncbox https://raw.githubusercontent.com/rockymadden/
 Export global variable in your `~/.bash_profile`:
 
 ```bash
-$ export RSYNCBOX_REMOTE_SMB_PATH=//username@ip/share
+$ export RSYNCBOX_REMOTE_SMB_PATH=//ip/share
 ```
 
 Initialize:
@@ -24,13 +24,13 @@ $ rsyncbox init
 ## Usage
 
 ```bash
-$ rsyncbox [status | connect | disconnect | clean | secure | pull | pulldiff | push | pushdiff]
+$ rsyncbox [init | status | clean | secure | pull | pulldiff | push | pushdiff]
 ```
 
 You can issue mutiple subcommands at once:
 
 ```bash
-$ rsyncbox connect clean secure push
+$ rsyncbox clean secure push
 ```
 
 ## Subcommands
@@ -39,8 +39,6 @@ $ rsyncbox connect clean secure push
   * `~/.rsyncbox` is the local configuration
   * `${RSYNCBOX_REMOTE_SMB_PATH}/rsyncbox` is the remote store
 * __status:__ Returns the remote status and the last timestamps for `clean`, `secure`, `push`, and `pull`
-* __connect:__ Connects to the remote store via `mount_smbfs`
-* __disconnect:__ Disconnects from the remote store via `unmount`
 * __clean:__ Removes, efficiently, all `.DS_Store` files from the local store
 * __secure:__ Secures, efficiently, the local store via `find` and `chmod`
   * Non-executables: 600

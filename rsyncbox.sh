@@ -23,7 +23,7 @@ function disconnect() {
 
 function help() {
   echo "Example usage:"
-  echo "  rsyncbox [init | status | connect | disconnect | clean | secure | pull | pulldiff | push | pushdiff]"
+  echo "  rsyncbox [init | status | clean | secure | pull | pulldiff | push | pushdiff]"
   echo
   echo "Example multiple subcommand usage:"
   echo "  rsyncbox clean secure push"
@@ -46,6 +46,8 @@ function pull() {
 
   touch ~/.rsyncbox/pull > /dev/null 2>&1;
   rsync -av --inplace --delete --ignore-errors --exclude=.DS_Store /volumes/rsyncbox/rsyncbox/ ~/rsyncbox/
+
+  disconnect
 }
 
 function pulldiff() {
@@ -54,6 +56,8 @@ function pulldiff() {
   fi
 
   rsync -av --dry-run --inplace --delete --ignore-errors --exclude=.DS_Store /volumes/rsyncbox/rsyncbox/ ~/rsyncbox/
+
+  disconnect
 }
 
 function push() {
@@ -63,6 +67,8 @@ function push() {
 
   touch ~/.rsyncbox/push > /dev/null 2>&1;
   rsync -av --inplace --delete --ignore-errors --exclude=.DS_Store ~/rsyncbox/ /volumes/rsyncbox/rsyncbox/
+
+  disconnect
 }
 
 function pushdiff() {
@@ -71,6 +77,8 @@ function pushdiff() {
   fi
 
   rsync -av --dry-run --inplace --delete --ignore-errors --exclude=.DS_Store ~/rsyncbox/ /volumes/rsyncbox/rsyncbox/
+
+  disconnect
 }
 
 function secure() {
@@ -86,12 +94,6 @@ function secure() {
 }
 
 function status() {
-  if [ -d /volumes/rsyncbox ]; then
-    echo ' remote: connected'
-  else
-    echo ' remote: disconnected'
-  fi
-
   if [ -e ~/.rsyncbox/clean ]; then
     echo 'cleaned:' `stat -f "%Sm" -t "%Y-%m-%dT%H:%M:%S%z" ~/.rsyncbox/clean`
   else
@@ -125,8 +127,6 @@ for subcommand in "$@"
 do
   case ${subcommand} in
     clean) clean ;;
-    connect) connect ;;
-    disconnect) disconnect ;;
     init) init ;;
     pull) pull ;;
     pulldiff) pulldiff ;;
