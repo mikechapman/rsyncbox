@@ -6,7 +6,7 @@ Shell based Dropbox replacement with any SMB capable server (e.g. FreeNAS, Synol
 Make rsyncbox available in your `PATH`:
 
 ```bash
-$ curl -o /usr/local/bin/rsyncbox.sh https://raw.githubusercontent.com/rockymadden/rsyncbox/master/rsyncbox.sh && chmod 0755 /usr/local/bin/rsyncbox
+$ curl -o /usr/local/bin/rsyncbox https://raw.githubusercontent.com/rockymadden/rsyncbox/master/rsyncbox.sh && chmod 0755 /usr/local/bin/rsyncbox
 ```
 
 ## Configuration
