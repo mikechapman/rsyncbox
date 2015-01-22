@@ -9,11 +9,16 @@ Make rsyncbox available in your `PATH`:
 $ curl -o /usr/local/bin/rsyncbox https://raw.githubusercontent.com/rockymadden/rsyncbox/master/rsyncbox.sh && chmod 0755 /usr/local/bin/rsyncbox
 ```
 
-## Configuration
-Export a single global variable in `~/.bash_profile`:
+Export global variable in your `~/.bash_profile`:
 
 ```bash
 $ export RSYNCBOX_REMOTE_SMB_PATH=//username@ip/share
+```
+
+Initialize:
+
+```bash
+$ rsyncbox init
 ```
 
 ## Usage
