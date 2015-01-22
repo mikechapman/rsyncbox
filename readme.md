@@ -53,6 +53,7 @@ $ rsyncbox connect clean secure push
 # TODO
 * Sharing files via CloudApp/Droplr
 * Optional automated push/pull via Finder hooks
+* Optional excludes (e.g. `target/`, `.cabal-sandbox/`, `node_modules/`)
 
 ## License
 
