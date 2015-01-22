@@ -26,7 +26,7 @@ function help() {
   echo "  rsyncbox [init | status | connect | disconnect | clean | secure | pull | pulldiff | push | pushdiff]"
   echo
   echo "Example multiple subcommand usage:"
-  echo "  rsyncbox connect clean secure push"
+  echo "  rsyncbox clean secure push"
 }
 
 function init() {
@@ -40,20 +40,36 @@ function init() {
 }
 
 function pull() {
+  if [ ! -d /volumes/rsyncbox ]; then
+    connect
+  fi
+
   touch ~/.rsyncbox/pull > /dev/null 2>&1;
   rsync -av --inplace --delete --ignore-errors --exclude=.DS_Store /volumes/rsyncbox/rsyncbox/ ~/rsyncbox/
 }
 
 function pulldiff() {
+  if [ ! -d /volumes/rsyncbox ]; then
+    connect
+  fi
+
   rsync -av --dry-run --inplace --delete --ignore-errors --exclude=.DS_Store /volumes/rsyncbox/rsyncbox/ ~/rsyncbox/
 }
 
 function push() {
+  if [ ! -d /volumes/rsyncbox ]; then
+    connect
+  fi
+
   touch ~/.rsyncbox/push > /dev/null 2>&1;
   rsync -av --inplace --delete --ignore-errors --exclude=.DS_Store ~/rsyncbox/ /volumes/rsyncbox/rsyncbox/
 }
 
 function pushdiff() {
+  if [ ! -d /volumes/rsyncbox ]; then
+    connect
+  fi
+
   rsync -av --dry-run --inplace --delete --ignore-errors --exclude=.DS_Store ~/rsyncbox/ /volumes/rsyncbox/rsyncbox/
 }
 
