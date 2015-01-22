@@ -21,7 +21,7 @@ function disconnect() {
   rmdir /volumes/rsyncbox > /dev/null 2>&1;
 }
 
-function helpful() {
+function help() {
   echo "Example usage:"
   echo "  rsyncbox [init | status | connect | disconnect | clean | secure | push | pull]"
   echo
@@ -103,14 +103,12 @@ do
     clean) clean ;;
     connect) connect ;;
     disconnect) disconnect ;;
-    --help) helpful ;;
-    help) helpful ;;
     init) init ;;
     pull) pull ;;
     push) push ;;
     secure) secure ;;
     status) status ;;
-    version) version ;;
+    --help) help ;;
     --version) version ;;
   esac
 done
