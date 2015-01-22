@@ -63,9 +63,9 @@ function secure() {
 
 function status() {
   if [ -d /volumes/rsyncbox ]; then
-    echo ' server: connected'
+    echo ' remote: connected'
   else
-    echo ' server: disconnected'
+    echo ' remote: disconnected'
   fi
 
   if [ -e ~/.rsyncbox/clean ]; then
