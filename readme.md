@@ -29,14 +29,9 @@ $ rsyncbox clean secure push
 
 ## Commands
 * __init:__ Creates local and remote directories, if they do not exist
-  * `~/rsyncbox` is the local store
-  * `~/.rsyncbox` is the local configuration
-  * `${RSYNCBOX_REMOTE_SMB_PATH}/rsyncbox` is the remote store
-* __status:__ Returns the remote status and the last timestamps for `clean`, `secure`, `push`, and `pull`
-* __clean:__ Removes, efficiently, all `.DS_Store` files from the local store
+* __status:__ Returns the last timestamps for `clean`, `secure`, `push`, and `pull`
+* __clean:__ Removes, efficiently, all `.DS_Store` files from the local store via `find`
 * __secure:__ Secures, efficiently, the local store via `find` and `chmod`
-  * Non-executables: 600
-  * Executables: 700
 * __pull:__ Pulls delta from remote store via `rsync`
 * __pulldiff:__ Shows pull delta to remote store via `rsync --dry-run`
 * __push:__ Pushes delta to remote store via `rsync`
