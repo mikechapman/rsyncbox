@@ -9,31 +9,25 @@ Make executable available in your `PATH`:
 $ curl -o /usr/local/bin/rsyncbox https://raw.githubusercontent.com/rockymadden/rsyncbox/master/rsyncbox.sh && chmod 0755 /usr/local/bin/rsyncbox
 ```
 
-Export global variable in your `~/.bash_profile`:
-
-```bash
-$ export RSYNCBOX_REMOTE_SMB_PATH=//ip/share
-```
-
 Initialize:
 
 ```bash
-$ rsyncbox init
+$ rsyncbox init //ip/share
 ```
 
 ## Usage
 
 ```bash
-$ rsyncbox [init | status | clean | secure | pull | pulldiff | push | pushdiff]
+$ rsyncbox [status | clean | secure | pull | pulldiff | push | pushdiff]
 ```
 
-You can issue mutiple subcommands at once:
+Issue multiple commands in a single statement:
 
 ```bash
 $ rsyncbox clean secure push
 ```
 
-## Subcommands
+## Commands
 * __init:__ Creates local and remote directories, if they do not exist
   * `~/rsyncbox` is the local store
   * `~/.rsyncbox` is the local configuration
@@ -48,7 +42,7 @@ $ rsyncbox clean secure push
 * __push:__ Pushes delta to remote store via `rsync`
 * __pushdiff:__ Shows push delta to remote store via `rsync --dry-run`
 
-# TODO
+## TODO
 * Sharing files via CloudApp/Droplr
 * Optional automated push/pull via Finder hooks
 * Optional excludes (e.g. `target/`, `.cabal-sandbox/`, `node_modules/`)

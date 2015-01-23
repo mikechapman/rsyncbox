@@ -1,89 +1,70 @@
 #!/bin/bash
 
 function clean() {
-  touch ~/.rsyncbox/clean > /dev/null 2>&1;
+  touch ~/.rsyncbox/clean
   find ~/rsyncbox -type f -name '*.DS_Store' -ls -delete
 }
 
 function connect() {
-  if [ -z "$RSYNCBOX_REMOTE_SMB_PATH" ]; then
-    echo "Remote SMB path variable not set"
-  else
-    touch ~/.rsyncbox/connect > /dev/null 2>&1;
+  if [ ! -d /volumes/rsyncbox ]; then
     mkdir /volumes/rsyncbox > /dev/null 2>&1;
-    mount_smbfs "$RSYNCBOX_REMOTE_SMB_PATH" /volumes/rsyncbox
+    mount_smbfs "$(<~/.rsyncbox/remote)" /volumes/rsyncbox > /dev/null 2>&1;
   fi
 }
 
 function disconnect() {
-  touch ~/.rsyncbox/disconnect > /dev/null 2>&1;
-  umount /volumes/rsyncbox > /dev/null 2>&1;
-  rmdir /volumes/rsyncbox > /dev/null 2>&1;
+  if [ -d /volumes/rsyncbox ]; then
+    umount /volumes/rsyncbox > /dev/null 2>&1;
+    rmdir /volumes/rsyncbox > /dev/null 2>&1;
+  fi
 }
 
 function help() {
   echo "Example usage:"
-  echo "  rsyncbox [init | status | clean | secure | pull | pulldiff | push | pushdiff]"
+  echo "  rsyncbox init PATH"
+  echo "  rsyncbox [status | clean | secure | pull | pulldiff | push | pushdiff]"
   echo
-  echo "Example multiple subcommand usage:"
+  echo "Example multiple command usage:"
   echo "  rsyncbox clean secure push"
 }
 
 function init() {
-  mkdir ~/.rsyncbox > /dev/null 2>&1;
   mkdir ~/rsyncbox > /dev/null 2>&1;
-
+  mkdir ~/.rsyncbox > /dev/null 2>&1;
+  echo "$1" > ~/.rsyncbox/remote
   disconnect
   connect
-
-  mkdir /volumes/rsyncbox/rsyncbox/ > /dev/null 2>&1;
+  mkdir /volumes/rsyncbox/rsyncbox > /dev/null 2>&1;
 }
 
 function pull() {
-  if [ ! -d /volumes/rsyncbox ]; then
-    connect
-  fi
-
-  touch ~/.rsyncbox/pull > /dev/null 2>&1;
+  connect
+  touch ~/.rsyncbox/pull
   rsync -av --inplace --delete --ignore-errors --exclude=.DS_Store /volumes/rsyncbox/rsyncbox/ ~/rsyncbox/
-
   disconnect
 }
 
 function pulldiff() {
-  if [ ! -d /volumes/rsyncbox ]; then
-    connect
-  fi
-
+  connect
   rsync -av --dry-run --inplace --delete --ignore-errors --exclude=.DS_Store /volumes/rsyncbox/rsyncbox/ ~/rsyncbox/
-
   disconnect
 }
 
 function push() {
-  if [ ! -d /volumes/rsyncbox ]; then
-    connect
-  fi
-
-  touch ~/.rsyncbox/push > /dev/null 2>&1;
+  connect
+  touch ~/.rsyncbox/push
   rsync -av --inplace --delete --ignore-errors --exclude=.DS_Store ~/rsyncbox/ /volumes/rsyncbox/rsyncbox/
-
   disconnect
 }
 
 function pushdiff() {
-  if [ ! -d /volumes/rsyncbox ]; then
-    connect
-  fi
-
+  connect
   rsync -av --dry-run --inplace --delete --ignore-errors --exclude=.DS_Store ~/rsyncbox/ /volumes/rsyncbox/rsyncbox/
-
   disconnect
 }
 
 function secure() {
-  touch ~/.rsyncbox/secure > /dev/null 2>&1;
-  # TODO: More extensions.
+  touch ~/.rsyncbox/secure
   find ~/rsyncbox ! -perm 0700 -type d -exec chmod 0700 {} + &&
   find ~/rsyncbox ! \( -name \*.purs -o -name \*.clj -o -name \*.coffee -o -name \*.hs -o -name \*.js -o -name \*.py -o -name \*.scala -o -name \*.sh \) ! -perm 0600 -type fl -exec chmod 0600 {} + &&
   find ~/rsyncbox \( -name \*.purs -o -name \*.clj -o -name \*.coffee -o -name \*.hs -o -name \*.js -o -name \*.py -o -name \*.scala -o -name \*.sh \) ! -perm 0700 -type fl -exec chmod 0700 {} +
@@ -123,18 +104,22 @@ function version() {
   echo "v0.1.0"
 }
 
-for subcommand in "$@"
-do
-  case ${subcommand} in
-    clean) clean ;;
-    init) init ;;
-    pull) pull ;;
-    pulldiff) pulldiff ;;
-    push) push ;;
-    pushdiff) pushdiff ;;
-    secure) secure ;;
-    status) status ;;
-    --help) help ;;
-    --version) version ;;
-  esac
-done
+case ${1} in
+  init) init "$2" ;;
+  *)
+    for command in "$@"
+    do
+      case ${command} in
+        clean) clean ;;
+        pull) pull ;;
+        pulldiff) pulldiff ;;
+        push) push ;;
+        pushdiff) pushdiff ;;
+        secure) secure ;;
+        status) status ;;
+        --help) help ;;
+        --version) version ;;
+      esac
+    done
+    ;;
+esac
