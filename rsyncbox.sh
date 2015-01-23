@@ -43,7 +43,6 @@ function init() {
 
   mkdir ~/rsyncbox > /dev/null 2>&1;
   mkdir ~/.rsyncbox > /dev/null 2>&1;
-  disconnect
   connect
   mkdir /volumes/rsyncbox/rsyncbox > /dev/null 2>&1;
 }
