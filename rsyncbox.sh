@@ -35,15 +35,15 @@ function help() {
 function init() {
   read -p "Enter remote ip: " ip
   read -p "Enter remote share: " share
-  read -p "Enter remote username: " username
-  read -s -p "Enter remote password: " password
+  read -p "Enter remote username: " user
+  read -s -p "Enter remote password: " pass
   echo
 
-  security add-internet-password -U -l "rsyncbox" -a "$username" -s "$ip" -p "/$share" -r "smb " -w "$password"
+  security add-internet-password -U -l "rsyncbox" -a "$user" -s "$ip" -p "/$share" -r "smb " -w "$pass"
 
+  connect
   mkdir ~/rsyncbox > /dev/null 2>&1;
   mkdir ~/.rsyncbox > /dev/null 2>&1;
-  connect
   mkdir /volumes/rsyncbox/rsyncbox > /dev/null 2>&1;
 }
 
