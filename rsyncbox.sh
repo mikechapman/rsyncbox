@@ -123,22 +123,18 @@ function version() {
   echo "v0.1.0"
 }
 
-case ${1} in
-  init) init "$2" ;;
-  *)
-    for command in "$@"
-    do
-      case ${command} in
-        clean) clean ;;
-        pull) pull ;;
-        pulldiff) pulldiff ;;
-        push) push ;;
-        pushdiff) pushdiff ;;
-        secure) secure ;;
-        status) status ;;
-        --help) help ;;
-        --version) version ;;
-      esac
-    done
-    ;;
-esac
+for command in "$@"
+do
+  case ${command} in
+    clean) clean ;;
+    init) init ;;
+    pull) pull ;;
+    pulldiff) pulldiff ;;
+    push) push ;;
+    pushdiff) pushdiff ;;
+    secure) secure ;;
+    status) status ;;
+    --help) help ;;
+    --version) version ;;
+  esac
+done
