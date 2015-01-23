@@ -1,6 +1,6 @@
 # rsyncbox <sub><sup>v0.2.0</sup></sub>
 
-Shell based Dropbox replacement for OS X. It has Keychain integration and works with any SMB/SMB2 capable remote (e.g. FreeNAS, Synology, QNap, Drobo, Linux server, Windows server). Conceptualization and command usage inspired by Git (e.g. remotes, push, pull).
+Dead simple shell-based Dropbox replacement for OS X. It has Keychain integration, supports multiple remotes, and works with any SMB/SMB2 capable server (e.g. FreeNAS, Synology, QNap, Drobo, Linux server, Windows server). Conceptualization and command usage inspired by Git (e.g. remotes, push, pull).
 
 ## Installation
 
@@ -13,38 +13,79 @@ $ curl -o /usr/local/bin/rsyncbox https://raw.githubusercontent.com/rockymadden/
 Initialize:
 
 ```bash
-# Prompts for remote info, which is stored in your keychain.
 $ rsyncbox init
+```
+
+Create your first remote:
+
+```bash
+# Prompts for information, all of which is stored in your Keychain.
+$ rsyncbox remote add
 ```
 
 ## Usage
 
-```bash
-$ rsyncbox [status | clean | secure | pull | pulldiff | push | pushdiff]
-```
-
-Issue multiple commands in a single statement:
+Create local config directory `~/.rsyncbox` and store `~/rsyncbox`:
 
 ```bash
-$ rsyncbox clean secure push
+$ rsyncbox init
 ```
 
-## Commands
+Remove, efficiently, all `.DS_Store` files on the local store via `find`:
 
-* __init:__ Creates local directories, remote directories, and Keychain entry
-* __status:__ Returns the last timestamps for `clean`, `secure`, `push`, and `pull`
-* __clean:__ Removes, efficiently, all `.DS_Store` files on the local store via `find`
-* __secure:__ Secures, efficiently, all files and folders on the local store via `find` and `chmod` (e.g. 700 for executables and 600 for others)
-* __pull:__ Pulls delta from remote store via `rsync`
-* __pulldiff:__ Shows pull delta to remote store via `rsync --dry-run`
-* __push:__ Pushes delta to remote store via `rsync`
-* __pushdiff:__ Shows push delta to remote store via `rsync --dry-run`
+```bash
+$ rsyncbox clean
+```
+
+Secure, efficiently, all files and folders on the local store via `find` and `chmod` (e.g. 700 for executables and 600 for others):
+
+```bash
+$ rsyncbox secure
+```
+
+Add a new remote (you can have more than one):
+
+```bash
+$ rsyncbox remote add
+```
+
+Show pull delta information from remote store via `rsync --dry-run`:
+
+```bash
+$ rsyncbox diff remotename pull
+```
+
+Show push delta information to remote store via `rsync --dry-run`:
+
+```bash
+$ rsyncbox diff remotename push
+```
+
+Pulls delta from remote store via `rsync`:
+
+```bash
+$ rsyncbox pull remotename
+```
+
+Pushes delta to remote store via `rsync`:
+
+```bash
+$ rsyncbox push remotename
+```
+
+Return the last timestamps for `clean`, `secure`, `push`, and `pull`
+
+```bash
+$ rsyncbox status
+```
 
 ## TODO
 
 * Sharing files via CloudApp/Droplr
 * Optional automated push/pull via Finder hooks
 * Optional excludes (e.g. `target/`, `.cabal-sandbox/`, `node_modules/`)
+* AFP support
+* Attached storage support
 
 ## License
 

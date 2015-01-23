@@ -7,8 +7,8 @@ function clean() {
 
 function connect() {
   if [ ! -d /volumes/rsyncbox ]; then
-    keychain=`security find-internet-password -l 'rsyncbox'`
-    pass=`security find-internet-password -w -l 'rsyncbox'`
+    keychain=`security find-internet-password -l "rsyncbox-$1"`
+    pass=`security find-internet-password -w -l "rsyncbox-$1"`
     user=`echo "$keychain" | grep 'acct' | sed 's/^.*="\(.*\)".*$/\1/'`
     share=`echo "$keychain" | grep 'path' | sed 's/^.*="\(.*\)".*$/\1/'`
     ip=`echo "$keychain" | grep 'srvr' | sed 's/^.*="\(.*\)".*$/\1/'`
@@ -20,6 +20,22 @@ function connect() {
   fi
 }
 
+function diff() {
+  case "$2" in
+    pull)
+      connect "$1"
+      rsync -av --dry-run --inplace --delete --ignore-errors --exclude=.DS_Store /volumes/rsyncbox/rsyncbox/ ~/rsyncbox/
+      disconnect
+    ;;
+    push)
+      connect "$1"
+      rsync -av --dry-run --inplace --delete --ignore-errors --exclude=.DS_Store ~/rsyncbox/ /volumes/rsyncbox/rsyncbox/
+      disconnect
+    ;;
+    *) echo 'Unknown diff type' ;;
+  esac
+}
+
 function disconnect() {
   if [ -d /volumes/rsyncbox ]; then
     umount /volumes/rsyncbox > /dev/null 2>&1;
@@ -29,48 +45,47 @@ function disconnect() {
 
 function help() {
   echo "Example usage:"
-  echo "  rsyncbox [init | status | clean | secure | pull | pulldiff | push | pushdiff]"
+  echo "  rsyncbox [init | status | clean | secure]"
+  echo "  rsyncbox diff REMOTE [push | pull]"
+  echo "  rsyncbox pull REMOTE"
+  echo "  rsyncbox push REMOTE"
 }
 
 function init() {
-  read -p "Enter remote ip: " ip
-  read -p "Enter remote share: " share
-  read -p "Enter remote username: " user
-  read -s -p "Enter remote password: " pass
-  echo
-
-  security add-internet-password -U -l "rsyncbox" -a "$user" -s "$ip" -p "/$share" -r "smb " -w "$pass"
-
-  connect
   mkdir ~/rsyncbox > /dev/null 2>&1;
   mkdir ~/.rsyncbox > /dev/null 2>&1;
-  mkdir /volumes/rsyncbox/rsyncbox > /dev/null 2>&1;
 }
 
 function pull() {
-  connect
+  connect "$1"
   touch ~/.rsyncbox/pull
   rsync -av --inplace --delete --ignore-errors --exclude=.DS_Store /volumes/rsyncbox/rsyncbox/ ~/rsyncbox/
   disconnect
 }
 
-function pulldiff() {
-  connect
-  rsync -av --dry-run --inplace --delete --ignore-errors --exclude=.DS_Store /volumes/rsyncbox/rsyncbox/ ~/rsyncbox/
-  disconnect
-}
-
 function push() {
-  connect
+  connect "$1"
   touch ~/.rsyncbox/push
   rsync -av --inplace --delete --ignore-errors --exclude=.DS_Store ~/rsyncbox/ /volumes/rsyncbox/rsyncbox/
   disconnect
 }
 
-function pushdiff() {
-  connect
-  rsync -av --dry-run --inplace --delete --ignore-errors --exclude=.DS_Store ~/rsyncbox/ /volumes/rsyncbox/rsyncbox/
-  disconnect
+function remote() {
+  case "$1" in
+    add)
+      read -p "Enter remote name: " name
+      read -p "Enter remote ip/domain: " ip
+      read -p "Enter remote share: " share
+      read -p "Enter remote username: " user
+      read -s -p "Enter remote password: " pass
+      echo
+
+      security add-internet-password -U -l "rsyncbox-$name" -a "$user" -s "$ip" -p "/$share" -r "smb " -w "$pass"
+
+      connect "$name"
+      mkdir /volumes/rsyncbox/rsyncbox > /dev/null 2>&1;
+    ;;
+  esac
 }
 
 function secure() {
@@ -118,18 +133,41 @@ function version() {
   echo "v0.2.0"
 }
 
-for command in "$@"
-do
-  case ${command} in
-    clean) clean ;;
-    init) init ;;
-    pull) pull ;;
-    pulldiff) pulldiff ;;
-    push) push ;;
-    pushdiff) pushdiff ;;
-    secure) secure ;;
-    status) status ;;
-    --help) help ;;
-    --version) version ;;
-  esac
-done
+# Route.
+case "$1" in
+  clean) clean ;;
+  diff)
+    if [ ! "$#" -eq 3 ]; then
+      echo 'Remote name and diff type arguments required'
+    else
+
+      diff "$2" "$3"
+    fi
+  ;;
+  init) init ;;
+  pull)
+    if [ ! "$#" -eq 2 ]; then
+      echo 'Remote name argument required'
+    else
+      pull "$2"
+    fi
+  ;;
+  push)
+    if [ ! "$#" -eq 2 ]; then
+      echo 'Remote name argument required'
+    else
+      push "$2"
+    fi
+  ;;
+  remote)
+    if [ ! "$#" -eq 2 ]; then
+      echo 'Action and remote name arguments required'
+    else
+      remote "$2"
+    fi
+  ;;
+  secure) secure ;;
+  status) status ;;
+  --help) help ;;
+  --version) version ;;
+esac
