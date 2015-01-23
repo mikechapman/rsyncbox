@@ -5,10 +5,6 @@ function clean() {
   find ~/rsyncbox -type f -name '*.DS_Store' -ls -delete
 }
 
-function urlencode() {
-  echo -ne "$1" | hexdump -v -e '/1 "%02x"' | sed 's/\(..\)/%\1/g'
-}
-
 function connect() {
   if [ ! -d /volumes/rsyncbox ]; then
     keychain=`security find-internet-password -l 'rsyncbox'`
@@ -119,8 +115,12 @@ function status() {
   fi
 }
 
+function urlencode() {
+  echo -ne "$1" | hexdump -v -e '/1 "%02x"' | sed 's/\(..\)/%\1/g'
+}
+
 function version() {
-  echo "v0.1.0"
+  echo "v0.2.0"
 }
 
 for command in "$@"
