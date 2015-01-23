@@ -5,10 +5,22 @@ function clean() {
   find ~/rsyncbox -type f -name '*.DS_Store' -ls -delete
 }
 
+function urlencode() {
+  echo -ne "$1" | hexdump -v -e '/1 "%02x"' | sed 's/\(..\)/%\1/g'
+}
+
 function connect() {
   if [ ! -d /volumes/rsyncbox ]; then
+    keychain=`security find-internet-password -l 'rsyncbox'`
+    pass=`security find-internet-password -w -l 'rsyncbox'`
+    user=`echo "$keychain" | grep 'acct' | sed 's/^.*="\(.*\)".*$/\1/'`
+    share=`echo "$keychain" | grep 'path' | sed 's/^.*="\(.*\)".*$/\1/'`
+    ip=`echo "$keychain" | grep 'srvr' | sed 's/^.*="\(.*\)".*$/\1/'`
+    urlpass=`urlencode "$pass"`
+    urluser=`urlencode "$user"`
+
     mkdir /volumes/rsyncbox > /dev/null 2>&1;
-    mount_smbfs "$(<~/.rsyncbox/remote)" /volumes/rsyncbox > /dev/null 2>&1;
+    mount_smbfs "//$urluser:$urlpass@$ip$share" /volumes/rsyncbox > /dev/null 2>&1;
   fi
 }
 
@@ -29,9 +41,16 @@ function help() {
 }
 
 function init() {
+  read -p "Enter remote ip: " ip
+  read -p "Enter remote share: " share
+  read -p "Enter remote username: " username
+  read -s -p "Enter remote password: " password
+  echo
+
+  security add-internet-password -U -l "rsyncbox" -a "$username" -s "$ip" -p "/$share" -r "smb " -w "$password"
+
   mkdir ~/rsyncbox > /dev/null 2>&1;
   mkdir ~/.rsyncbox > /dev/null 2>&1;
-  echo "$1" > ~/.rsyncbox/remote
   disconnect
   connect
   mkdir /volumes/rsyncbox/rsyncbox > /dev/null 2>&1;
