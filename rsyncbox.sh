@@ -29,11 +29,7 @@ function disconnect() {
 
 function help() {
   echo "Example usage:"
-  echo "  rsyncbox init PATH"
-  echo "  rsyncbox [status | clean | secure | pull | pulldiff | push | pushdiff]"
-  echo
-  echo "Example multiple command usage:"
-  echo "  rsyncbox clean secure push"
+  echo "  rsyncbox [init | status | clean | secure | pull | pulldiff | push | pushdiff]"
 }
 
 function init() {
