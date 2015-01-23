@@ -130,7 +130,7 @@ function urlencode() {
 }
 
 function version() {
-  echo "v0.2.0"
+  echo "v0.3.0"
 }
 
 # Route.

@@ -1,4 +1,4 @@
-# rsyncbox <sub><sup>v0.2.0</sup></sub>
+# rsyncbox <sub><sup>v0.3.0</sup></sub>
 
 Dead simple shell-based Dropbox replacement for OS X. It has Keychain integration, supports multiple remotes, and works with any SMB/SMB2 capable server (e.g. FreeNAS, Synology, QNap, Drobo, Linux server, Windows server). Conceptualization and command usage inspired by Git (e.g. remotes, push, pull).
 
